@@ -55,21 +55,21 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto"
             >
-              <Avatar className="h-8 w-8 rounded-lg ring-1 ring-border">
+              <Avatar className="h-8 w-8 rounded-lg ring-1 ring-border shrink-0">
                 <AvatarImage src={user.image || undefined} alt={user.name} />
                 <AvatarFallback className="rounded-lg bg-primary text-white font-bold text-xs">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                 <span className="truncate font-medium text-text">{user.name}</span>
                 <span className="truncate text-xs text-muted">
                   {user.email}
                 </span>
               </div>
-              <MoreVerticalIcon className="ml-auto size-4 text-muted" />
+              <MoreVerticalIcon className="ml-auto size-4 text-muted group-data-[collapsible=icon]:hidden" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

@@ -31,10 +31,15 @@ export function NavSecondary({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
-                <Link href={item.url} className="flex items-center gap-2">
-                  <item.icon className="h-4 w-4 text-muted" />
-                  <span className="text-xs font-medium text-text">{item.title}</span>
+              <SidebarMenuButton asChild size="sm" tooltip={item.title}>
+                <Link
+                  href={item.url}
+                  className="flex items-center gap-2.5 w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0"
+                >
+                  <item.icon className="h-4 w-4 text-muted shrink-0" />
+                  <span className="text-xs font-medium text-text group-data-[collapsible=icon]:hidden truncate">
+                    {item.title}
+                  </span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

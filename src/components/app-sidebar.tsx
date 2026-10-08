@@ -73,8 +73,8 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-r border-border bg-surface">
-      <SidebarHeader className="h-14 shrink-0 border-b border-border px-4 flex items-center">
-        <Link href="/dashboard" className="flex items-center gap-3 w-full group-data-[collapsible=icon]:justify-center">
+      <SidebarHeader className="h-14 shrink-0 border-b border-border px-4 group-data-[collapsible=icon]:px-0 flex items-center justify-center">
+        <Link href="/dashboard" className="flex items-center gap-3 w-full group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:justify-center">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-xs shrink-0">
             <Server className="h-5 w-5 stroke-[2.2]" />
           </div>
@@ -90,7 +90,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <NavSecondary items={navSecondaryItems} className="mt-auto" />
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border p-2 shrink-0">
+      <SidebarFooter className="border-t border-border p-2 group-data-[collapsible=icon]:p-1 shrink-0 flex items-center justify-center">
         <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
