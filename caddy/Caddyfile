@@ -4,7 +4,11 @@
     }
 }
 
-# Initial Caddy Manager reverse proxy route
-:80 {
-    reverse_proxy app:3000
+portmap.pallabdev.in {
+    reverse_proxy app:3000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
 }
