@@ -9,8 +9,8 @@ export class CaddyService {
   private adminApiUrl: string;
 
   constructor() {
-    this.configPath = path.resolve(/*turbopackIgnore: true*/ process.cwd(), env.CADDY_CONFIG_PATH);
-    this.adminApiUrl = env.CADDY_ADMIN_API_URL.replace(/\/+$/, "");
+    this.configPath = path.resolve(/*turbopackIgnore: true*/ process.cwd(), env.CADDY_CONFIG_PATH || "./caddy/Caddyfile");
+    this.adminApiUrl = (env.CADDY_ADMIN_API_URL || "http://caddy:2019").replace(/\/+$/, "");
   }
 
   /**

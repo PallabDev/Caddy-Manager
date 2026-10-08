@@ -12,8 +12,8 @@ export const auth = betterAuth({
       ...schema,
     },
   }),
-  secret: env.BETTER_AUTH_SECRET,
-  baseURL: env.BETTER_AUTH_URL,
+  secret: env.BETTER_AUTH_SECRET || "build_dummy_secret_key_32_characters_long",
+  baseURL: env.BETTER_AUTH_URL || "http://localhost:3000",
   user: {
     additionalFields: {
       isAccess: {
