@@ -73,10 +73,13 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-r border-border bg-surface">
-      <SidebarHeader className="h-14 shrink-0 border-b border-border px-4 group-data-[collapsible=icon]:px-0 flex items-center justify-center">
-        <Link href="/dashboard" className="flex items-center gap-3 w-full group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:justify-center">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-xs shrink-0">
-            <Server className="h-5 w-5 stroke-[2.2]" />
+      <SidebarHeader className="h-14 shrink-0 border-b border-border px-3.5 group-data-[collapsible=icon]:px-0 flex flex-row items-center justify-start group-data-[collapsible=icon]:justify-center">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-3 w-full group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:justify-center"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white shadow-xs shrink-0 group-data-[collapsible=icon]:mx-auto">
+            <Server className="h-4 w-4 stroke-[2.2]" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
             <span className="truncate font-bold text-text">Caddy Manager</span>
