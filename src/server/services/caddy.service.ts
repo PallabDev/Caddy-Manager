@@ -23,7 +23,7 @@ export class CaddyService {
     // Global options block with admin API enabled
     lines.push("{");
     lines.push("    admin 0.0.0.0:2019 {");
-    lines.push("        origins *");
+    lines.push("        origins caddy:2019 caddy localhost:2019 127.0.0.1:2019 localhost 127.0.0.1");
     lines.push("    }");
     lines.push("}");
     lines.push("");
