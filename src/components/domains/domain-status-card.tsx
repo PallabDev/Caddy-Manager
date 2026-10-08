@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { type Domain } from "@/server/db/schema";
-import { deleteDomainAction } from "@/features/domains/actions/domain.actions";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface DiagnosticsData {
@@ -49,6 +49,7 @@ export function DomainStatusCard({
   isAdmin = false,
   onDeleted,
 }: DomainStatusCardProps) {
+  const router = useRouter();
   const [diagnostics, setDiagnostics] = useState<DiagnosticsData | null>(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [isProbing, setIsProbing] = useState(false);
@@ -124,13 +125,16 @@ export function DomainStatusCard({
 
     setIsDeleting(true);
     try {
-      const result = await deleteDomainAction(domain.id);
-      if (result.success) {
+      const res = await fetch(`/api/domains/${domain.id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
         toast.success(`Domain ${domain.domain} removed successfully.`);
+        router.refresh();
         if (onDeleted) onDeleted();
-        else window.location.reload();
       } else {
-        toast.error(result.error || "Failed to remove route");
+        toast.error(data.error || "Failed to remove route");
       }
     } catch {
       toast.error("Unexpected error removing route.");

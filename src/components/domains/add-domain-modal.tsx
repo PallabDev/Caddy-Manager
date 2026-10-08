@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addDomainAction } from "@/features/domains/actions/domain.actions";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface AddDomainModalProps {
@@ -30,6 +30,7 @@ export function AddDomainModal({
   occupiedPorts = [],
   onDomainAdded,
 }: AddDomainModalProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState(currentUsername || "");
   const [domain, setDomain] = useState("");
@@ -71,14 +72,20 @@ export function AddDomainModal({
     setLoading(true);
 
     try {
-      const result = await addDomainAction({
-        username: username.trim() || currentUsername,
-        domain: cleanDomain,
-        port: portNum,
+      const res = await fetch("/api/domains", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username.trim() || currentUsername,
+          domain: cleanDomain,
+          port: portNum,
+        }),
       });
 
-      if (!result.success) {
-        const msg = result.error || "Failed to add domain.";
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        const msg = data.error || "Failed to add domain.";
         setError(msg);
         toast.error(msg);
         setLoading(false);
@@ -89,6 +96,7 @@ export function AddDomainModal({
       setOpen(false);
       setDomain("");
       setPort("");
+      router.refresh();
       if (onDomainAdded) onDomainAdded();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
