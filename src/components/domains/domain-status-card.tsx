@@ -68,6 +68,23 @@ export function DomainStatusCard({
     }
   }, [domain.lastCheckResult]);
 
+  // Auto-probe once on mount if domain is currently pending DNS
+  useEffect(() => {
+    if (!domain.dnsConfigured) {
+      fetch(`/api/domains/${domain.id}/check`, { method: "POST" })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.diagnostics) {
+            setDiagnostics(data.diagnostics);
+            if (data.diagnostics.dnsConfigured) {
+              router.refresh();
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [domain.id, domain.dnsConfigured, router]);
+
   // Connect to Socket.IO real-time monitor
   useEffect(() => {
     const socket = io({
@@ -79,24 +96,34 @@ export function DomainStatusCard({
 
     socket.on("connect", () => {
       setIsSocketConnected(true);
-      socket.emit("subscribe:domain", domain.id);
+      socket.emit("watch-domain", { domainId: domain.id, domain: domain.domain });
     });
 
     socket.on("disconnect", () => {
       setIsSocketConnected(false);
     });
 
-    socket.on("domain:diagnostics", (data: DiagnosticsData) => {
-      if (data.domain === domain.domain) {
-        setDiagnostics(data);
+    socket.on("domain-status-update", (data: { domainId: string; diagnostics: DiagnosticsData; status: string }) => {
+      if (data.domainId === domain.id && data.diagnostics) {
+        setDiagnostics(data.diagnostics);
+        if (data.diagnostics.dnsConfigured && !domain.dnsConfigured) {
+          router.refresh();
+        }
+      }
+    });
+
+    socket.on("domain:diagnostics", (data: any) => {
+      const diag = data.diagnostics || data;
+      if (diag && (diag.domain === domain.domain || data.domainId === domain.id)) {
+        setDiagnostics(diag);
       }
     });
 
     return () => {
-      socket.emit("unsubscribe:domain", domain.id);
+      socket.emit("unwatch-domain", { domainId: domain.id });
       socket.disconnect();
     };
-  }, [domain.id, domain.domain]);
+  }, [domain.id, domain.domain, domain.dnsConfigured, router]);
 
   // Manual Trigger Probe
   const handleManualProbe = async () => {
@@ -107,7 +134,16 @@ export function DomainStatusCard({
       });
       if (res.ok) {
         const data = await res.json();
-        setDiagnostics(data);
+        const diag: DiagnosticsData = data.diagnostics || data;
+        setDiagnostics(diag);
+        router.refresh();
+        if (diag.dnsConfigured) {
+          toast.success("DNS configuration verified successfully!");
+        } else {
+          toast.error("DNS record not detected pointing to target IP yet.");
+        }
+      } else {
+        toast.error("Failed to run domain inspection probe.");
       }
     } catch (err) {
       console.error("Failed to probe domain manually", err);

@@ -40,9 +40,21 @@ export class DnsService {
       checkedAt: new Date().toISOString(),
     };
 
-    // 1. Check DNS resolution
+    // 1. Check DNS resolution (using Cloudflare & Google public DNS to bypass Docker DNS caching, with fallback)
     try {
-      const records = await dns.resolve4(cleanDomain);
+      let records: string[] = [];
+      try {
+        const resolver = new dns.Resolver();
+        resolver.setServers(["1.1.1.1", "8.8.8.8", "1.0.0.1", "8.8.4.4"]);
+        records = await resolver.resolve4(cleanDomain);
+      } catch {
+        try {
+          records = await dns.resolve4(cleanDomain);
+        } catch {
+          const lookupResult = await dns.lookup(cleanDomain, { all: true, family: 4 });
+          records = lookupResult.map((r) => r.address);
+        }
+      }
       result.resolvedIps = records;
       result.dnsConfigured = records.includes(targetIp);
     } catch (dnsErr) {
