@@ -4,24 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-sky-500 text-slate-950 font-semibold shadow hover:bg-sky-400 shadow-sky-500/20 hover:shadow-sky-500/40",
+          "bg-primary text-white shadow-sm hover:bg-primary-hover active:bg-primary-hover",
         destructive:
-          "bg-rose-600 text-white shadow-sm hover:bg-rose-500 shadow-rose-600/20",
+          "bg-danger text-white shadow-sm hover:opacity-90",
         outline:
-          "border border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200 hover:text-white border-slate-700/80",
+          "border border-border bg-surface text-text hover:bg-primary-soft hover:text-primary hover:border-primary/40",
         secondary:
-          "bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white shadow-sm",
+          "bg-primary-soft text-primary font-medium hover:bg-primary/15",
         ghost:
-          "text-slate-300 hover:bg-slate-800/80 hover:text-white",
+          "text-muted hover:bg-surface hover:text-text",
         link:
-          "text-sky-400 underline-offset-4 hover:underline",
-        gradient:
-          "bg-gradient-to-r from-sky-500 via-indigo-500 to-teal-400 text-slate-950 font-semibold shadow-lg shadow-sky-500/25 hover:opacity-95",
+          "text-primary underline-offset-4 hover:underline",
+        accent:
+          "bg-accent text-slate-950 font-semibold shadow-sm hover:opacity-95",
       },
       size: {
         default: "h-9 px-4 py-2",

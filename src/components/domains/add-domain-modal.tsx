@@ -62,21 +62,21 @@ export function AddDomainModal({
     }
 
     if (isPortOccupied) {
-      setError(`Port ${portNum} is already assigned to an existing reverse proxy route.`);
+      setError(`Port ${portNum} is already assigned to another service. Collision prevented.`);
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await addDomainAction({
+      const result = await addDomainAction({
         username: username.trim() || currentUsername,
         domain: cleanDomain,
         port: portNum,
       });
 
-      if (!res.success) {
-        setError(res.error || "Failed to create domain configuration.");
+      if (!result.success) {
+        setError(result.error || "Failed to add domain.");
         setLoading(false);
         return;
       }
@@ -95,21 +95,21 @@ export function AddDomainModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="gradient" className="gap-2">
+        <Button variant="default" className="gap-2 shadow-sm font-semibold">
           <Plus className="h-4 w-4" />
-          Add New Domain
+          Add Domain
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[540px]">
+      <DialogContent className="sm:max-w-[540px] bg-surface border-border text-text">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <div className="flex items-center gap-3 mb-1">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
                 <Globe className="h-5 w-5" />
               </div>
               <div>
-                <DialogTitle>Configure New Domain</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-text">Configure New Domain</DialogTitle>
+                <DialogDescription className="text-muted">
                   Set up reverse proxy routing in Caddy with automatic SSL certificate provisioning.
                 </DialogDescription>
               </div>
@@ -119,7 +119,7 @@ export function AddDomainModal({
           <div className="grid gap-4 py-4">
             {/* Username Input */}
             <div className="grid gap-2">
-              <Label htmlFor="username">Username / Project Owner</Label>
+              <Label htmlFor="username" className="text-text">Username / Project Owner</Label>
               <Input
                 id="username"
                 value={username}
@@ -127,14 +127,14 @@ export function AddDomainModal({
                 placeholder="e.g. jdoe or my-project"
                 required
               />
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted">
                 The identifier associated with this domain assignment.
               </p>
             </div>
 
             {/* Domain Input */}
             <div className="grid gap-2">
-              <Label htmlFor="domain">Domain Name</Label>
+              <Label htmlFor="domain" className="text-text">Domain Name</Label>
               <Input
                 id="domain"
                 value={domain}
@@ -144,22 +144,22 @@ export function AddDomainModal({
               />
             </div>
 
-            {/* DNS Instructions Banner (Dynamically shown when domain entered) */}
+            {/* DNS Instructions Banner */}
             {cleanDomain.length > 2 && (
-              <div className="rounded-xl border border-sky-500/30 bg-sky-950/30 p-3.5 text-sm transition-all animate-in fade-in slide-in-from-top-2">
+              <div className="rounded-xl border border-primary/30 bg-primary-soft/40 p-3.5 text-sm transition-all animate-in fade-in slide-in-from-top-2">
                 <div className="flex items-start gap-2.5">
-                  <div className="p-1 rounded bg-sky-500/20 text-sky-400 mt-0.5">
+                  <div className="p-1 rounded bg-primary/20 text-primary mt-0.5">
                     <ArrowRight className="h-4 w-4" />
                   </div>
                   <div className="flex-1 space-y-1.5">
-                    <p className="font-medium text-sky-200">DNS Configuration Required</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">
-                      Add an <span className="font-semibold text-white">A record</span> for{" "}
-                      <span className="font-mono text-sky-300 font-semibold">{cleanDomain}</span> on your DNS provider
+                    <p className="font-medium text-text">DNS Configuration Required</p>
+                    <p className="text-xs text-muted leading-relaxed">
+                      Add an <span className="font-semibold text-text">A record</span> for{" "}
+                      <span className="font-mono text-primary font-semibold">{cleanDomain}</span> on your DNS provider
                       pointing to:
                     </p>
                     <div className="flex items-center gap-2 mt-1">
-                      <code className="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 font-mono text-xs text-emerald-400 font-bold">
+                      <code className="px-2.5 py-1 rounded bg-surface border border-border font-mono text-xs text-primary font-bold">
                         {serverIp}
                       </code>
                       <Button
@@ -171,7 +171,7 @@ export function AddDomainModal({
                       >
                         {copiedDns ? (
                           <>
-                            <Check className="h-3 w-3 text-emerald-400" /> Copied!
+                            <Check className="h-3 w-3 text-success" /> Copied!
                           </>
                         ) : (
                           <>
@@ -188,9 +188,9 @@ export function AddDomainModal({
             {/* Port Input */}
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="port">Target Service Port</Label>
+                <Label htmlFor="port" className="text-text">Target Service Port</Label>
                 {isPortOccupied && (
-                  <span className="text-xs text-rose-400 font-medium flex items-center gap-1">
+                  <span className="text-xs text-danger font-medium flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" /> Port already occupied!
                   </span>
                 )}
@@ -204,16 +204,16 @@ export function AddDomainModal({
                 min={1}
                 max={65535}
                 required
-                className={isPortOccupied ? "border-rose-500 focus-visible:ring-rose-500" : ""}
+                className={isPortOccupied ? "border-danger focus-visible:ring-danger" : ""}
               />
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted">
                 The local port your upstream application is listening on (forwarded via Caddy).
               </p>
             </div>
 
             {error && (
-              <div className="rounded-lg border border-rose-500/30 bg-rose-950/40 p-3 text-xs text-rose-300 flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="rounded-lg border border-danger/30 bg-danger/10 p-3 text-xs text-danger flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-danger" />
                 <span>{error}</span>
               </div>
             )}
@@ -232,7 +232,7 @@ export function AddDomainModal({
               type="submit"
               variant="default"
               disabled={loading || isPortOccupied || !cleanDomain || !port}
-              className="gap-2"
+              className="gap-2 font-medium"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               Save & Apply Route

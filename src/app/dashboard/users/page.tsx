@@ -25,25 +25,25 @@ export default async function UsersPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <Users className="h-6 w-6 text-sky-400" />
+          <h1 className="text-2xl font-bold tracking-tight text-text flex items-center gap-2.5">
+            <Users className="h-6 w-6 text-primary" />
             User Access & Permissions
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Approve new Google sign-ups, toggle <code className="text-sky-300">isAccess</code>, and manage administrator privileges.
+          <p className="text-sm text-muted mt-1">
+            Approve new Google sign-ups, toggle <code className="text-primary font-mono">isAccess</code>, and manage administrator privileges.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
-            <span className="text-slate-300">Approved:</span>
-            <strong className="text-white">{totalApproved}</strong>
+          <div className="flex items-center gap-2 bg-surface border border-border px-3 py-1.5 rounded-lg text-xs">
+            <ShieldCheck className="h-4 w-4 text-success" />
+            <span className="text-muted">Approved:</span>
+            <strong className="text-text">{totalApproved}</strong>
           </div>
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs">
-            <ShieldAlert className="h-4 w-4 text-amber-400" />
-            <span className="text-slate-300">Pending:</span>
-            <strong className="text-white">{totalPending}</strong>
+          <div className="flex items-center gap-2 bg-surface border border-border px-3 py-1.5 rounded-lg text-xs">
+            <ShieldAlert className="h-4 w-4 text-warning" />
+            <span className="text-muted">Pending:</span>
+            <strong className="text-text">{totalPending}</strong>
           </div>
         </div>
       </div>

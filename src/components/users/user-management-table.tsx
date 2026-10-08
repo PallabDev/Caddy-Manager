@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShieldCheck, ShieldAlert, CheckCircle2, XCircle, Trash2, Loader2, User as UserIcon } from "lucide-react";
+import { ShieldCheck, CheckCircle2, XCircle, Trash2, Loader2, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -75,7 +75,7 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
   };
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/70 backdrop-blur-md overflow-hidden shadow-xl">
+    <div className="rounded-xl border border-border bg-surface overflow-hidden shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
@@ -96,28 +96,28 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
                 {/* User Info */}
                 <TableCell>
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
+                    <Avatar className="h-9 w-9 ring-1 ring-border">
                       <AvatarImage src={u.image || undefined} alt={u.name} />
-                      <AvatarFallback className="bg-slate-800 text-xs">
+                      <AvatarFallback className="bg-primary-soft text-primary font-bold text-xs">
                         {u.name.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <div className="font-semibold text-white flex items-center gap-2">
+                      <div className="font-semibold text-text flex items-center gap-2">
                         {u.name}
                         {isSelf && (
-                          <span className="text-[10px] font-mono bg-sky-500/20 text-sky-400 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-mono bg-primary-soft text-primary px-1.5 py-0.5 rounded font-bold">
                             You
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-slate-400 font-mono">{u.email}</div>
+                      <div className="text-xs text-muted font-mono">{u.email}</div>
                     </div>
                   </div>
                 </TableCell>
 
                 {/* Joined Date */}
-                <TableCell className="text-xs text-slate-400">
+                <TableCell className="text-xs text-muted">
                   {formatDate(u.createdAt)}
                 </TableCell>
 
@@ -137,7 +137,7 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
                 {/* Admin Role */}
                 <TableCell>
                   {u.admin ? (
-                    <Badge variant="default" className="gap-1 bg-indigo-500/15 text-indigo-400 border-indigo-500/30">
+                    <Badge variant="default" className="gap-1">
                       <ShieldCheck className="h-3 w-3" /> Administrator
                     </Badge>
                   ) : (
@@ -156,7 +156,7 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
                       variant={u.isAccess ? "outline" : "default"}
                       onClick={() => handleToggleAccess(u)}
                       disabled={isLoading}
-                      className="h-8 text-xs"
+                      className="h-8 text-xs font-medium"
                     >
                       {isLoading ? (
                         <Loader2 className="h-3 w-3 animate-spin" />
@@ -174,7 +174,7 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
                         variant="secondary"
                         onClick={() => handleToggleRole(u)}
                         disabled={isLoading}
-                        className="h-8 text-xs"
+                        className="h-8 text-xs font-medium"
                       >
                         {u.admin ? "Demote" : "Make Admin"}
                       </Button>

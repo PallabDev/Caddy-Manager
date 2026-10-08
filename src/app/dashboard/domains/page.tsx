@@ -22,11 +22,11 @@ export default async function DomainsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <Globe className="h-6 w-6 text-sky-400" />
+          <h1 className="text-2xl font-bold tracking-tight text-text flex items-center gap-2.5">
+            <Globe className="h-6 w-6 text-primary" />
             Proxy Domains
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-muted mt-1">
             {user.admin
               ? "All reverse proxy routes across the system (Administrator view)."
               : "Domains managed by your account."}

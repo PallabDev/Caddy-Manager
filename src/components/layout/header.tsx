@@ -42,23 +42,23 @@ export function Header({ user }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-surface/90 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 shadow-md shadow-sky-500/20 group-hover:shadow-sky-500/40 transition-shadow">
-              <Server className="h-5 w-5 text-slate-950 stroke-[2.5]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition-transform group-hover:scale-105">
+              <Server className="h-5 w-5 stroke-[2.2]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold tracking-tight text-white flex items-center gap-1.5 text-base">
+              <span className="font-bold tracking-tight text-text flex items-center gap-1.5 text-base">
                 Caddy Manager
-                <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
               </span>
-              <span className="text-xs text-slate-400 font-mono">Reverse Proxy Control</span>
+              <span className="text-xs text-muted font-mono">Reverse Proxy Control</span>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 ml-4">
+          <nav className="hidden md:flex items-center gap-1.5 ml-4">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -67,10 +67,10 @@ export function Header({ user }: HeaderProps) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-colors",
+                    "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-slate-800 text-sky-400 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                      ? "bg-primary-soft text-primary font-semibold shadow-xs"
+                      : "text-muted hover:text-text hover:bg-primary-soft/40"
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -83,19 +83,19 @@ export function Header({ user }: HeaderProps) {
 
         <div className="flex items-center gap-3">
           <Link href="/health" target="_blank" className="hidden sm:inline-flex">
-            <Button variant="ghost" size="sm" className="text-xs text-slate-400 hover:text-white gap-1.5">
-              <Activity className="h-3.5 w-3.5 text-emerald-400" />
-              Health API
+            <Button variant="ghost" size="sm" className="text-xs text-muted hover:text-text gap-1.5">
+              <Activity className="h-3.5 w-3.5 text-primary" />
+              Health JSON
               <ExternalLink className="h-3 w-3 opacity-60" />
             </Button>
           </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2.5 rounded-full p-1 pl-2 text-left hover:bg-slate-900 border border-slate-800/80 transition-colors focus:outline-none">
+              <button className="flex items-center gap-2.5 rounded-full p-1 pl-2 text-left hover:bg-primary-soft/50 border border-border transition-colors focus:outline-none cursor-pointer">
                 <div className="hidden sm:flex flex-col items-end">
-                  <span className="text-xs font-semibold text-slate-200">{user.name}</span>
-                  <span className="text-[10px] text-sky-400 font-mono flex items-center gap-1">
+                  <span className="text-xs font-semibold text-text">{user.name}</span>
+                  <span className="text-[10px] text-primary font-mono flex items-center gap-1">
                     {user.admin ? (
                       <>
                         <ShieldCheck className="h-3 w-3" /> Admin
@@ -105,41 +105,41 @@ export function Header({ user }: HeaderProps) {
                     )}
                   </span>
                 </div>
-                <Avatar className="h-8 w-8 ring-1 ring-sky-500/30">
+                <Avatar className="h-8 w-8 ring-1 ring-border">
                   <AvatarImage src={user.image || undefined} alt={user.name} />
-                  <AvatarFallback className="bg-gradient-to-br from-sky-500 to-indigo-600 text-slate-950 font-bold text-xs">
+                  <AvatarFallback className="bg-primary text-white font-bold text-xs">
                     {user.name.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 p-2">
+            <DropdownMenuContent align="end" className="w-56 p-2 bg-surface border-border text-text">
               <div className="px-2 py-1.5">
-                <p className="text-sm font-medium text-white">{user.name}</p>
-                <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                <p className="text-sm font-medium text-text">{user.name}</p>
+                <p className="text-xs text-muted truncate">{user.email}</p>
               </div>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem asChild>
-                <Link href="/dashboard" className="cursor-pointer">
+                <Link href="/dashboard" className="cursor-pointer hover:bg-primary-soft hover:text-primary">
                   <Server className="mr-2 h-4 w-4" /> Dashboard
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/domains" className="cursor-pointer">
+                <Link href="/dashboard/domains" className="cursor-pointer hover:bg-primary-soft hover:text-primary">
                   <Globe className="mr-2 h-4 w-4" /> My Domains
                 </Link>
               </DropdownMenuItem>
               {user.admin && (
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/users" className="cursor-pointer text-sky-400">
+                  <Link href="/dashboard/users" className="cursor-pointer text-primary hover:bg-primary-soft">
                     <Users className="mr-2 h-4 w-4" /> User Management
                   </Link>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="bg-border" />
               <DropdownMenuItem
                 onClick={handleSignOut}
-                className="cursor-pointer text-rose-400 focus:text-rose-300 focus:bg-rose-950/40"
+                className="cursor-pointer text-danger focus:text-danger focus:bg-danger/10"
               >
                 <LogOut className="mr-2 h-4 w-4" /> Sign Out
               </DropdownMenuItem>
