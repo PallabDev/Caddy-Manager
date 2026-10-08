@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/server/auth.helper";
-import { Header } from "@/components/layout/header";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +22,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-bg text-text transition-colors">
-      <Header
+    <SidebarProvider>
+      <AppSidebar
         user={{
           id: user.id,
           name: user.name,
@@ -30,10 +32,14 @@ export default async function DashboardLayout({
           admin: user.admin,
           isAccess: user.isAccess,
         }}
+        variant="inset"
       />
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        {children}
-      </main>
-    </div>
+      <SidebarInset className="bg-bg text-text min-h-screen flex flex-col">
+        <SiteHeader />
+        <main className="flex-1 p-4 md:p-6 lg:p-8 space-y-6">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -103,7 +103,7 @@ export default async function HomePage() {
             </div>
             <h3 className="font-bold text-text text-base">Zero Trust Security</h3>
             <p className="text-xs text-muted leading-relaxed">
-              Strict Google OAuth authentication, role-based access approval (<code className="text-primary font-mono">isAccess</code>), and isolated domain ownership.
+              Strict Google OAuth authentication, role-based access approval, and isolated domain ownership.
             </p>
           </div>
 

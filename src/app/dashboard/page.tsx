@@ -15,7 +15,6 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Cpu,
-  Terminal,
 } from "lucide-react";
 import Link from "next/link";
 import { env } from "@/lib/env";
@@ -36,14 +35,14 @@ export default async function DashboardPage() {
   const occupiedPorts = domainList.map((d) => d.port);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-200">
-      {/* Top Welcome & Actions Header (dashboard-01 style) */}
+    <div className="space-y-6">
+      {/* Top Welcome & Actions Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text">
-            Dashboard
-          </h1>
-          <p className="text-sm text-muted mt-1">
+          <h2 className="text-2xl font-bold tracking-tight text-text">
+            Dashboard Overview
+          </h2>
+          <p className="text-sm text-muted mt-0.5">
             Real-time Caddy reverse proxy router and automated SSL monitor.
           </p>
         </div>
@@ -63,9 +62,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* 4 KPI Summary Stat Cards (dashboard-01 layout) */}
+      {/* 4 KPI Summary Stat Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1: Total Routes */}
         <Card className="hover:border-primary/40 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted">
@@ -83,7 +81,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Card 2: Active DNS */}
         <Card className="hover:border-primary/40 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted">
@@ -101,7 +98,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Card 3: Pending DNS */}
         <Card className="hover:border-primary/40 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted">
@@ -119,7 +115,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Card 4: Target IP */}
         <Card className="hover:border-primary/40 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted">
@@ -140,16 +135,15 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* Main Grid: Left Primary Cards & Right System Info (dashboard-01 structure) */}
+      {/* Main Grid: Configured Domains on Left & System Info on Right */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-        {/* Left Column (2 cols): Domains & Routes */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <h2 className="text-lg font-bold text-text flex items-center gap-2">
+              <h3 className="text-lg font-bold text-text flex items-center gap-2">
                 <Globe className="h-5 w-5 text-primary" />
                 Configured Domains
-              </h2>
+              </h3>
               <p className="text-xs text-muted">
                 Live inspection status streamed continuously via Socket.IO
               </p>
@@ -161,9 +155,9 @@ export default async function DashboardPage() {
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary mb-3">
                 <Globe className="h-6 w-6" />
               </div>
-              <h3 className="text-base font-bold text-text">No domains configured yet</h3>
+              <h4 className="text-base font-bold text-text">No domains configured yet</h4>
               <p className="text-xs text-muted max-w-sm mx-auto mt-1 mb-5">
-                Add your first domain to bind it to a local service port. Caddy will automatically issue a Let's Encrypt SSL certificate.
+                Add your first domain to bind it to a local service port. Caddy will automatically issue a Let&apos;s Encrypt SSL certificate.
               </p>
               <AddDomainModal
                 currentUsername={user.username || user.name}
@@ -185,7 +179,6 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Right Column (1 col): System Architecture & DNS Helper */}
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -215,10 +208,10 @@ export default async function DashboardPage() {
 
               <div className="space-y-1.5 text-muted leading-relaxed">
                 <p>
-                  1. Add an A record in Cloudflare or Namecheap pointing to <strong className="text-text font-mono">{env.SERVER_PUBLIC_IP}</strong>.
+                  1. Add an A record on your DNS provider pointing to <strong className="text-text font-mono">{env.SERVER_PUBLIC_IP}</strong>.
                 </p>
                 <p>
-                  2. As soon as DNS propagates, Caddy automatically acquires a trusted TLS certificate on port 443.
+                  2. As soon as DNS resolves, Caddy automatically provisions a trusted TLS certificate on port 443.
                 </p>
                 <p>
                   3. The port collision guard ensures your target port is never assigned twice.
