@@ -23,7 +23,7 @@ export class CaddyService {
     // Global options block with admin API enabled
     lines.push("{");
     lines.push("    admin 0.0.0.0:2019 {");
-    lines.push("        origins caddy:2019 caddy localhost:2019 127.0.0.1:2019 localhost 127.0.0.1");
+    lines.push("        origins *");
     lines.push("    }");
     lines.push("}");
     lines.push("");
@@ -96,6 +96,7 @@ export class CaddyService {
         method: "POST",
         headers: {
           "Content-Type": "text/caddyfile",
+          Origin: "http://localhost:2019",
         },
         body: caddyfileContent,
         signal: AbortSignal.timeout(5000),
@@ -129,6 +130,9 @@ export class CaddyService {
     try {
       const res = await fetch(`${this.adminApiUrl}/config/`, {
         method: "GET",
+        headers: {
+          Origin: "http://localhost:2019",
+        },
         signal: AbortSignal.timeout(3000),
       });
 
