@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-ServerCaddy}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-caddy_manager_secure_password}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME:-caddy_manager}
     # NOTE: As per constraints, NO port is forwarded to the host for DB security
     volumes:
@@ -57,19 +57,19 @@ services:
       - ./caddy:/app/caddy
     environment:
       # Caddy Manager Initial Domain & Ports
-      CADDY_MANAGER_DOMAIN: ${CADDY_MANAGER_DOMAIN:-localhost}
-      CADDY_MANAGER_PORT: ${CADDY_MANAGER_PORT:-3000}
-      CADDY_MANAGER_USER_EMAIL: ${CADDY_MANAGER_USER_EMAIL:-admin@example.com}
-      SERVER_PUBLIC_IP: ${SERVER_PUBLIC_IP:-127.0.0.1}
+      CADDY_MANAGER_DOMAIN: ${CADDY_MANAGER_DOMAIN}
+      CADDY_MANAGER_PORT: ${CADDY_MANAGER_PORT}
+      CADDY_MANAGER_USER_EMAIL: ${CADDY_MANAGER_USER_EMAIL}
+      SERVER_PUBLIC_IP: ${SERVER_PUBLIC_IP}
 
       # Database internal connection (no external port exposure)
-      DATABASE_URL: postgresql://${DB_USER:-ServerCaddy}:${DB_PASSWORD:-caddy_manager_secure_password}@db:5432/${DB_NAME:-caddy_manager}
+      DATABASE_URL: postgresql://${DB_USER:-ServerCaddy}:${DB_PASSWORD}@db:5432/${DB_NAME:-caddy_manager}
 
       # Auth credentials
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-caddy_manager_super_secret_auth_token_key_32_bytes_long}
-      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
 
       # Caddy integration inside docker network
       CADDY_ADMIN_API_URL: http://caddy:2019
