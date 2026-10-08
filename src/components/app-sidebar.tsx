@@ -7,7 +7,6 @@ import {
   Users,
   LayoutDashboard,
   Activity,
-  FileCode,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -63,11 +62,6 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       title: "System Status",
       url: "/status",
       icon: Activity,
-    },
-    {
-      title: "Health API (JSON)",
-      url: "/health",
-      icon: FileCode,
     },
   ];
 
