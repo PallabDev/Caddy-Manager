@@ -4,15 +4,12 @@ import { domainService } from "@/server/services/domain.service";
 import { AddDomainModal } from "@/components/domains/add-domain-modal";
 import { DomainStatusCard } from "@/components/domains/domain-status-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Globe,
   CheckCircle2,
   AlertTriangle,
   Server,
-  Activity,
 } from "lucide-react";
-import Link from "next/link";
 import { env } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +41,6 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Link href="/status">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <Activity className="h-4 w-4 text-primary" />
-              System Status
-            </Button>
-          </Link>
           <AddDomainModal
             currentUsername={user.username || user.name}
             serverIp={env.SERVER_PUBLIC_IP}
