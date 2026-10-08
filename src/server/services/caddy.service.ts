@@ -22,8 +22,9 @@ export class CaddyService {
 
     // Global options block with admin API enabled
     lines.push("{");
-    lines.push("    admin 0.0.0.0:2019");
-    lines.push("    auto_https disable_redirects");
+    lines.push("    admin 0.0.0.0:2019 {");
+    lines.push("        origins caddy:2019 caddy localhost:2019 127.0.0.1:2019 localhost 127.0.0.1");
+    lines.push("    }");
     lines.push("}");
     lines.push("");
 
@@ -37,6 +38,8 @@ export class CaddyService {
       lines.push(`    reverse_proxy app:${managerPort} {`);
       lines.push(`        header_up Host {host}`);
       lines.push(`        header_up X-Real-IP {remote_host}`);
+      lines.push(`        header_up X-Forwarded-For {remote_host}`);
+      lines.push(`        header_up X-Forwarded-Proto {scheme}`);
       lines.push(`    }`);
       lines.push("}");
       lines.push("");

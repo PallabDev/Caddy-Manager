@@ -1,5 +1,7 @@
 {
-    admin 0.0.0.0:2019
+    admin 0.0.0.0:2019 {
+        origins caddy:2019 caddy localhost:2019 127.0.0.1:2019 localhost 127.0.0.1
+    }
 }
 
 # Initial Caddy Manager reverse proxy route
