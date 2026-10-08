@@ -1,0 +1,65 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Build & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Next.js Application
+        run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: "1"
+
+  deploy:
+    name: Deploy to VPS
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_IP || secrets.vps_ip }}
+          username: ${{ secrets.VPS_USER || secrets.vps_user }}
+          key: ${{ secrets.SSH_KEY || secrets.ssh_key }}
+          port: 22
+          script_stop: true
+          script: |
+            echo "Navigating to project directory..."
+            cd /root/project/Caddy-Manager
+
+            echo "Discarding local container-generated file changes..."
+            git checkout -- caddy/Caddyfile || true
+
+            echo "Pulling latest changes from repository..."
+            git pull origin master
+
+            echo "Shutting down existing containers..."
+            docker compose down
+
+            echo "Building and starting updated containers..."
+            docker compose up -d --build
+
+            echo "Pruning dangling images and BuildKit cache..."
+            docker image prune -f
+            docker builder prune -f
+
+            echo "Deployment finished. Checking container status..."
+            docker compose ps
