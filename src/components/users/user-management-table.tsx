@@ -21,6 +21,8 @@ import {
 } from "@/features/users/actions/user.actions";
 import { formatDate } from "@/lib/utils";
 
+import toast from "react-hot-toast";
+
 interface UserManagementTableProps {
   initialUsers: User[];
   currentAdminId: string;
@@ -38,13 +40,16 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
       setUserList((prev) =>
         prev.map((u) => (u.id === targetUser.id ? { ...u, isAccess: newAccess } : u))
       );
+      toast.success(newAccess ? `Access granted to ${targetUser.name || targetUser.email}` : `Access revoked from ${targetUser.name || targetUser.email}`);
+    } else {
+      toast.error(res.error || "Failed to update user access.");
     }
     setLoadingId(null);
   };
 
   const handleToggleRole = async (targetUser: User) => {
     if (targetUser.id === currentAdminId) {
-      alert("You cannot revoke your own administrator rights.");
+      toast.error("You cannot revoke your own administrator privileges.");
       return;
     }
     setLoadingId(targetUser.id);
@@ -54,22 +59,28 @@ export function UserManagementTable({ initialUsers, currentAdminId }: UserManage
       setUserList((prev) =>
         prev.map((u) => (u.id === targetUser.id ? { ...u, admin: newAdmin } : u))
       );
+      toast.success(newAdmin ? `Promoted ${targetUser.name} to Administrator` : `Demoted ${targetUser.name} to Standard User`);
+    } else {
+      toast.error(res.error || "Failed to update user role.");
     }
     setLoadingId(null);
   };
 
   const handleDeleteUser = async (targetUser: User) => {
     if (targetUser.id === currentAdminId) {
-      alert("You cannot delete your own account.");
+      toast.error("You cannot delete your own account.");
       return;
     }
-    if (!confirm(`Are you sure you want to delete user ${targetUser.email}?`)) {
+    if (!confirm(`Are you sure you want to remove user ${targetUser.email}?`)) {
       return;
     }
     setLoadingId(targetUser.id);
     const res = await deleteUserAction(targetUser.id);
     if (res.success) {
       setUserList((prev) => prev.filter((u) => u.id !== targetUser.id));
+      toast.success(`User ${targetUser.email} has been removed.`);
+    } else {
+      toast.error(res.error || "Failed to delete user.");
     }
     setLoadingId(null);
   };

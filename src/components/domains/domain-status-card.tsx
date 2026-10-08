@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { type Domain } from "@/server/db/schema";
 import { deleteDomainAction } from "@/features/domains/actions/domain.actions";
+import toast from "react-hot-toast";
 
 interface DiagnosticsData {
   domain: string;
@@ -109,6 +110,7 @@ export function DomainStatusCard({
       }
     } catch (err) {
       console.error("Failed to probe domain manually", err);
+      toast.error("Failed to run domain inspection probe.");
     } finally {
       setIsProbing(false);
     }
@@ -124,13 +126,14 @@ export function DomainStatusCard({
     try {
       const result = await deleteDomainAction(domain.id);
       if (result.success) {
+        toast.success(`Domain ${domain.domain} removed successfully.`);
         if (onDeleted) onDeleted();
         else window.location.reload();
       } else {
-        alert(result.error || "Failed to remove route");
+        toast.error(result.error || "Failed to remove route");
       }
     } catch {
-      // handle error
+      toast.error("Unexpected error removing route.");
     } finally {
       setIsDeleting(false);
     }

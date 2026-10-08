@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { addDomainAction } from "@/features/domains/actions/domain.actions";
+import toast from "react-hot-toast";
 
 interface AddDomainModalProps {
   currentUsername: string;
@@ -44,6 +45,7 @@ export function AddDomainModal({
   const handleCopyDns = () => {
     navigator.clipboard.writeText(serverIp);
     setCopiedDns(true);
+    toast.success("Server IP copied to clipboard");
     setTimeout(() => setCopiedDns(false), 2000);
   };
 
@@ -76,17 +78,22 @@ export function AddDomainModal({
       });
 
       if (!result.success) {
-        setError(result.error || "Failed to add domain.");
+        const msg = result.error || "Failed to add domain.";
+        setError(msg);
+        toast.error(msg);
         setLoading(false);
         return;
       }
 
+      toast.success(`Domain ${cleanDomain} added successfully!`);
       setOpen(false);
       setDomain("");
       setPort("");
       if (onDomainAdded) onDomainAdded();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

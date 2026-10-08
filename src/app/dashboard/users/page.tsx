@@ -30,7 +30,7 @@ export default async function UsersPage() {
             User Access & Permissions
           </h1>
           <p className="text-sm text-muted mt-1">
-            Approve new Google sign-ups, toggle <code className="text-primary font-mono">isAccess</code>, and manage administrator privileges.
+            Approve new user sign-ups, grant dashboard access, and manage administrator privileges.
           </p>
         </div>
 

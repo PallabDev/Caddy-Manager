@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Server, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,9 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to initiate Google sign in.");
+      const msg = err instanceof Error ? err.message : "Failed to initiate Google sign in.";
+      setError(msg);
+      toast.error(msg);
       setLoading(false);
     }
   };

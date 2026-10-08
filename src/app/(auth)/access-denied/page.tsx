@@ -3,6 +3,7 @@
 import { ShieldAlert, RefreshCw, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function AccessDeniedPage() {
   const handleSignOut = async () => {
@@ -11,6 +12,7 @@ export default function AccessDeniedPage() {
   };
 
   const handleRefresh = () => {
+    toast("Checking account access status...");
     window.location.href = "/dashboard";
   };
 
@@ -22,17 +24,16 @@ export default function AccessDeniedPage() {
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-xl font-bold text-text">Access Pending Approval</h1>
+          <h1 className="text-xl font-bold text-text">Account Pending Approval</h1>
           <p className="text-sm text-muted leading-relaxed">
-            Your Google Account has been authenticated, but your account does not currently have the required{" "}
-            <span className="font-mono text-warning font-semibold">isAccess</span> authorization approval.
+            Your account has been successfully authenticated, but is awaiting approval from a system administrator before you can access the dashboard.
           </p>
         </div>
 
         <div className="rounded-xl border border-border bg-bg/50 p-4 text-xs text-muted text-left space-y-1.5">
           <p className="font-semibold text-text">What to do next:</p>
-          <p>1. Contact your system administrator to approve your account access.</p>
-          <p>2. Once the administrator approves access in the dashboard, click Refresh.</p>
+          <p>1. Contact your system administrator to approve your account.</p>
+          <p>2. Once your account is approved, click the button below to continue.</p>
         </div>
 
         <div className="flex flex-col gap-2.5">
@@ -43,7 +44,7 @@ export default function AccessDeniedPage() {
             className="w-full gap-2 font-medium"
           >
             <RefreshCw className="h-4 w-4" />
-            Check Access Again
+            Check Access Status
           </Button>
           <Button
             type="button"
