@@ -1,0 +1,91 @@
+services:
+  # 1. PostgreSQL Database Service
+  db:
+    image: postgres:16-alpine
+    container_name: caddy-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-ServerCaddy}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-caddy_manager_secure_password}
+      POSTGRES_DB: ${DB_NAME:-caddy_manager}
+    # NOTE: As per constraints, NO port is forwarded to the host for DB security
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - caddy-manager
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ServerCaddy} -d ${DB_NAME:-caddy_manager}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Caddy Reverse Proxy Service
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy-manager-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy-manager
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # 3. Next.js Web Management Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: caddy-manager-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      caddy:
+        condition: service_started
+    networks:
+      - caddy-manager
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./caddy:/app/caddy
+    environment:
+      # Caddy Manager Initial Domain & Ports
+      CADDY_MANAGER_DOMAIN: ${CADDY_MANAGER_DOMAIN:-localhost}
+      CADDY_MANAGER_PORT: ${CADDY_MANAGER_PORT:-3000}
+      CADDY_MANAGER_USER_EMAIL: ${CADDY_MANAGER_USER_EMAIL:-admin@example.com}
+      SERVER_PUBLIC_IP: ${SERVER_PUBLIC_IP:-127.0.0.1}
+
+      # Database internal connection (no external port exposure)
+      DATABASE_URL: postgresql://${DB_USER:-ServerCaddy}:${DB_PASSWORD:-caddy_manager_secure_password}@db:5432/${DB_NAME:-caddy_manager}
+
+      # Auth credentials
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-caddy_manager_super_secret_auth_token_key_32_bytes_long}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+
+      # Caddy integration inside docker network
+      CADDY_ADMIN_API_URL: http://caddy:2019
+      CADDY_CONFIG_PATH: /app/caddy/Caddyfile
+      NODE_ENV: production
+      PORT: 3000
+
+networks:
+  caddy-manager:
+    name: caddy-manager
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: caddy_manager_postgres_data
+  caddy_data:
+    name: caddy_manager_caddy_data
+  caddy_config:
+    name: caddy_manager_caddy_config
