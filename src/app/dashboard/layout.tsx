@@ -32,7 +32,7 @@ export default async function DashboardLayout({
           admin: user.admin,
           isAccess: user.isAccess,
         }}
-        variant="inset"
+        variant="sidebar"
       />
       <SidebarInset className="bg-bg text-text min-h-screen flex flex-col">
         <SiteHeader />

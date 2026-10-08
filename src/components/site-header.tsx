@@ -16,9 +16,9 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface/90 px-4 backdrop-blur-md transition-all lg:px-6">
+    <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 transition-all lg:px-6">
       <div className="flex items-center gap-2">
-        <SidebarTrigger className="-ml-1 text-muted hover:text-text" />
+        <SidebarTrigger className="-ml-1 text-muted hover:text-text hover:bg-primary-soft/60 rounded-md" />
         <Separator
           orientation="vertical"
           className="mx-2 h-4 bg-border"

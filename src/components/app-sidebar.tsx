@@ -73,22 +73,16 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-r border-border bg-surface">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard" className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-xs">
-                  <Server className="h-5 w-5 stroke-[2.2]" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-bold text-text">Caddy Manager</span>
-                  <span className="truncate text-xs text-muted font-mono">Reverse Proxy</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <SidebarHeader className="h-14 shrink-0 border-b border-border px-4 flex items-center">
+        <Link href="/dashboard" className="flex items-center gap-3 w-full group-data-[collapsible=icon]:justify-center">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-xs shrink-0">
+            <Server className="h-5 w-5 stroke-[2.2]" />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="truncate font-bold text-text">Caddy Manager</span>
+            <span className="truncate text-xs text-muted font-mono">Reverse Proxy</span>
+          </div>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>
@@ -96,7 +90,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <NavSecondary items={navSecondaryItems} className="mt-auto" />
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-border p-2 shrink-0">
         <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
