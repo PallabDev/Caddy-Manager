@@ -1,0 +1,8 @@
+{
+    admin 0.0.0.0:2019
+}
+
+# Initial Caddy Manager reverse proxy route
+:80 {
+    reverse_proxy app:3000
+}
