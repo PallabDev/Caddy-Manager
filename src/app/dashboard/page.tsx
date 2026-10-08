@@ -3,18 +3,14 @@ import { getCurrentUser } from "@/server/auth.helper";
 import { domainService } from "@/server/services/domain.service";
 import { AddDomainModal } from "@/components/domains/add-domain-modal";
 import { DomainStatusCard } from "@/components/domains/domain-status-card";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Globe,
   CheckCircle2,
   AlertTriangle,
   Server,
   Activity,
-  ArrowUpRight,
-  ShieldCheck,
-  Cpu,
 } from "lucide-react";
 import Link from "next/link";
 import { env } from "@/lib/env";
@@ -135,133 +131,47 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* Main Grid: Configured Domains on Left & System Info on Right */}
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <h3 className="text-lg font-bold text-text flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary" />
-                Configured Domains
-              </h3>
-              <p className="text-xs text-muted">
-                Live inspection status streamed continuously via Socket.IO
-              </p>
-            </div>
+      {/* Configured Domains Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <h3 className="text-lg font-bold text-text flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              Configured Domains
+            </h3>
+            <p className="text-xs text-muted">
+              Live inspection status streamed continuously via Socket.IO
+            </p>
           </div>
+        </div>
 
-          {domainList.length === 0 ? (
-            <Card className="border-dashed p-10 text-center bg-bg/50">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary mb-3">
-                <Globe className="h-6 w-6" />
-              </div>
-              <h4 className="text-base font-bold text-text">No domains configured yet</h4>
-              <p className="text-xs text-muted max-w-sm mx-auto mt-1 mb-5">
-                Add your first domain to bind it to a local service port. Caddy will automatically issue a Let&apos;s Encrypt SSL certificate.
-              </p>
-              <AddDomainModal
-                currentUsername={user.username || user.name}
-                serverIp={env.SERVER_PUBLIC_IP}
-                occupiedPorts={occupiedPorts}
-              />
-            </Card>
-          ) : (
-            <div className="grid gap-4">
-              {domainList.map((d) => (
-                <DomainStatusCard
-                  key={d.id}
-                  domain={d}
-                  currentUserId={user.id}
-                  isAdmin={user.admin}
-                />
-              ))}
+        {domainList.length === 0 ? (
+          <Card className="border-dashed p-10 text-center bg-bg/50">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary mb-3">
+              <Globe className="h-6 w-6" />
             </div>
-          )}
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                SSL & DNS Guide
-              </CardTitle>
-              <CardDescription>
-                Point your domain to enable automatic HTTPS
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4 text-xs">
-              <div className="rounded-lg border border-border bg-bg p-3.5 space-y-2">
-                <div className="font-semibold text-text flex items-center justify-between">
-                  <span>Required A-Record</span>
-                  <Badge variant="default" className="text-[10px]">Active</Badge>
-                </div>
-                <div className="flex items-center justify-between font-mono text-[11px] text-muted">
-                  <span>Type:</span>
-                  <span className="text-text font-bold">A</span>
-                </div>
-                <div className="flex items-center justify-between font-mono text-[11px] text-muted">
-                  <span>Points to:</span>
-                  <span className="text-primary font-bold">{env.SERVER_PUBLIC_IP}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1.5 text-muted leading-relaxed">
-                <p>
-                  1. Add an A record on your DNS provider pointing to <strong className="text-text font-mono">{env.SERVER_PUBLIC_IP}</strong>.
-                </p>
-                <p>
-                  2. As soon as DNS resolves, Caddy automatically provisions a trusted TLS certificate on port 443.
-                </p>
-                <p>
-                  3. The port collision guard ensures your target port is never assigned twice.
-                </p>
-              </div>
-
-              <div className="pt-2 border-t border-border flex items-center justify-between">
-                <span className="text-muted">Need full metrics?</span>
-                <Link href="/status">
-                  <Button variant="ghost" size="sm" className="text-xs text-primary gap-1">
-                    System Health
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
+            <h4 className="text-base font-bold text-text">No domains configured yet</h4>
+            <p className="text-xs text-muted max-w-sm mx-auto mt-1 mb-5">
+              Add your first domain to bind it to a local service port. Caddy will automatically issue a Let&apos;s Encrypt SSL certificate.
+            </p>
+            <AddDomainModal
+              currentUsername={user.username || user.name}
+              serverIp={env.SERVER_PUBLIC_IP}
+              occupiedPorts={occupiedPorts}
+            />
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Cpu className="h-4 w-4 text-accent" />
-                Reverse Proxy Core
-              </CardTitle>
-              <CardDescription>
-                Runtime configuration overview
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-xs">
-              <div className="flex items-center justify-between py-1 border-b border-border">
-                <span className="text-muted">Proxy Engine</span>
-                <span className="font-semibold text-text">Caddy 2 (Docker)</span>
-              </div>
-              <div className="flex items-center justify-between py-1 border-b border-border">
-                <span className="text-muted">Storage Driver</span>
-                <span className="font-semibold text-text">PostgreSQL 16</span>
-              </div>
-              <div className="flex items-center justify-between py-1 border-b border-border">
-                <span className="text-muted">Monitoring</span>
-                <span className="font-semibold text-text">Socket.IO Live</span>
-              </div>
-              <div className="flex items-center justify-between py-1">
-                <span className="text-muted">Health API</span>
-                <Link href="/health" target="_blank" className="font-mono text-primary hover:underline">
-                  /health (JSON)
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        ) : (
+          <div className="grid gap-4">
+            {domainList.map((d) => (
+              <DomainStatusCard
+                key={d.id}
+                domain={d}
+                currentUserId={user.id}
+                isAdmin={user.admin}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
