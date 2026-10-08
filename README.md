@@ -1,42 +1,42 @@
-# 🚀 Caddy Manager
+# Caddy Manager
 
 A modern, production-ready reverse proxy management system built with **Next.js (App Router)**, **Drizzle ORM**, **Better Auth**, and **Caddy Reverse Proxy** running seamlessly in **Docker**.
 
 ---
 
-## ✨ Features
+## Features
 
-- **🌐 Dynamic Caddy Virtual Host Management**:
+- **Dynamic Caddy Virtual Host Management**:
   - Add and delete proxy domains on-the-fly without downtime.
   - Automatically preserves all existing routes when new domains are registered.
   - Generates valid Caddyfile configurations dynamically and reloads Caddy via its Admin API (`http://caddy:2019`).
-- **🛡️ Strict Google Authentication & RBAC**:
+- **Strict Google Authentication & RBAC**:
   - Exclusively supports Google Single Sign-On via **Better Auth**.
   - **`isAccess` Approval Flow**: Newly registered users cannot access the system until an administrator toggles their `isAccess` approval.
   - **Isolated Route Ownership**: Standard users only see and manage their own domains. Administrators can view, inspect, and delete routes across all users.
   - **Bootstrap Admin**: The user with email matching `CADDY_MANAGER_USER_EMAIL` is automatically granted `admin: true` and `isAccess: true` upon first sign-in.
-- **⚡ Real-Time WebSocket Domain Inspection (Socket.IO)**:
+- **Real-Time WebSocket Domain Inspection (Socket.IO)**:
   - Streams continuous live diagnostics to the UI using WebSockets.
   - Checks DNS A-record resolution against the target server IP (`SERVER_PUBLIC_IP`).
   - Performs non-blocking HTTP/HTTPS probing (equivalent to `curl -I -L`) extracting status codes, latency, server headers, and webpage title.
   - Vercel-style domain status badge cards (`Valid Configuration` / `Pending DNS`).
-- **🔒 Port Collision & Input Validation**:
+- **Port Collision & Input Validation**:
   - Validates FQDN domain formatting and port ranges (1 - 65535).
   - Checks whether the desired port is already occupied by an existing route before saving.
   - Interactive DNS helper automatically prompts: `Add an A record for <domain> on DNS with target @ IP <SERVER_PUBLIC_IP>` with a one-click copy button.
-- **🛡️ Fortified Security Protections**:
+- **Fortified Security Protections**:
   - **SQL Injection**: Parameterized SQL queries via Drizzle ORM.
   - **Command Injection**: Zero shell executions; uses native Node.js `dns.promises` and `fetch`.
   - **XSS & CSRF**: Strict CSP, SameSite session cookies, and output sanitization.
   - **Network Isolation**: PostgreSQL database port is never exposed to the host machine.
-- **📊 Observability & Health**:
+- **Observability & Health**:
   - Structured logging with **Winston Logger**, masking all secrets, passwords, and tokens.
   - Dedicated Health Page (`/health`) and JSON endpoint (`/api/health`).
   - Public System Status Page (`/status`).
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 src/
@@ -71,7 +71,7 @@ src/
 
 ---
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 The entire stack spins up with Docker Compose:
 
@@ -103,7 +103,7 @@ The entire stack spins up with Docker Compose:
 
 ---
 
-## 🛠️ Local Development (Without Docker)
+## Local Development (Without Docker)
 
 If you wish to run the app directly on your local machine:
 
@@ -120,7 +120,7 @@ If you wish to run the app directly on your local machine:
 
 ---
 
-## 🔒 Security Hardening
+## Security Hardening
 
 | Attack Vector | Defense Mechanism |
 |---|---|

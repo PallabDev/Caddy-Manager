@@ -23,12 +23,12 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   if (isBuild) {
-    console.warn("⚠️ [Build Phase] Skipping strict env validation during next build static phase.");
+    console.warn("[Build Phase] Skipping strict env validation during next build static phase.");
   } else {
-    console.error("\n❌ ========================================================");
-    console.error("❌ CRITICAL: Missing or invalid required environment variables!");
-    console.error("❌ Every required value must be present in .env to start the server.");
-    console.error("❌ ========================================================\n");
+    console.error("\n========================================================");
+    console.error("CRITICAL: Missing or invalid required environment variables!");
+    console.error("Every required value must be present in .env to start the server.");
+    console.error("========================================================\n");
     console.error(JSON.stringify(parsed.error.format(), null, 2));
 
     const missingKeys = Object.keys(parsed.error.flatten().fieldErrors).join(", ");
